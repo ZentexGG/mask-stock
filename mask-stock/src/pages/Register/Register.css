@@ -4,11 +4,11 @@
     backdrop-filter: blur(10px);
 }
 
-#loginContainer h1 {
+#registerContainer h1 {
     text-align: center;
 }
 
-#loginContainer {
+#registerContainer {
     padding-top: 5% ;
     padding-bottom: 5%;
     padding-left: 2.5%;
@@ -24,7 +24,7 @@ body {
 }
 
 @media only screen and (min-width: 700px) {
-    #loginContainer {
+    #registerContainer {
         width: 45%;
     }
 }

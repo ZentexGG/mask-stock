@@ -1,0 +1,16 @@
+#page {
+    height: 100vh;
+    width: 100vw;
+}
+
+
+
+#loginContainer h1 {
+    text-align: center;
+}
+
+@media only screen and (min-width: 700px) {
+    #loginContainer {
+        width: 45%;
+    }
+}

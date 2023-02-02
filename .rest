@@ -1,0 +1,11 @@
+POST http://localhost:2002/api/signUp
+Content-Type: application/json
+
+{
+    "email":"ciocan@gmail.com",
+    "password":"nebunie"
+}
+
+
+
+

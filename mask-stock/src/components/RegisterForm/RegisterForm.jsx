@@ -42,9 +42,6 @@ export default function RegisterForm() {
             placeholder="Enter email..."
             size="lg"
           />
-          <Form.Control.Feedback type="invalid">
-            Please enter a valid email!
-          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group controlId="formEmail">
@@ -55,9 +52,6 @@ export default function RegisterForm() {
             placeholder="Enter username..."
             size="lg"
           />
-          <Form.Control.Feedback type="invalid">
-            Please enter a valid username!
-          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group controlId="formPassword">
@@ -68,9 +62,6 @@ export default function RegisterForm() {
             placeholder="Enter password..."
             size="lg"
           />
-          <Form.Control.Feedback type="invalid">
-            Please enter a password!
-          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group>

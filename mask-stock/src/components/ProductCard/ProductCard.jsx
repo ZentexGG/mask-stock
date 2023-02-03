@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
 import maskImg from "./../../img/mask-1.jpg";
 
 export default function ProductCard({text, price, description}) {
@@ -12,8 +13,7 @@ export default function ProductCard({text, price, description}) {
         <Card.Text>
           {description}
         </Card.Text>
-        <Card.Link href="#">Card Link</Card.Link>
-        <Card.Link href="#">Another Link</Card.Link>
+        <Button>Add to Cart</Button>
       </Card.Body>
     </Card>
   );

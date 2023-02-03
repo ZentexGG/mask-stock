@@ -31,9 +31,6 @@ export default function LoginForm() {
             placeholder="Enter email..."
             size="lg"
           />
-          <Form.Control.Feedback type="invalid">
-            Please enter a valid email!
-          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group controlId="formPassword">
@@ -44,9 +41,6 @@ export default function LoginForm() {
             placeholder="Enter password..."
             size="lg"
           />
-          <Form.Control.Feedback type="invalid">
-            Please enter a password!
-          </Form.Control.Feedback>
         </Form.Group>
         <br />
         <Button variant="success" type="submit">

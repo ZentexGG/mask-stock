@@ -9,7 +9,7 @@ export default function MainPage() {
   return (
     <div style={{ height: "100vh" }}>
       <NavbarComponent />
-      <Container fluid className="row me-1000px">
+      <Container fluid className="row justify-content-evenly">
         <ProductCard
           text={"(Worn by Marcela)"}
           price={"1.000.000€"}

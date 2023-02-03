@@ -6,16 +6,17 @@ import Form from "react-bootstrap/Form";
 function NavbarComponent() {
   const handleChange = (e) => {
     let selectedOption = e.target.options[e.target.options["selectedIndex"]];
+    console.log(`Currently selected hospital: ${selectedOption.innerText}`);
   };
 
   return (
     <Navbar bg="dark" variant="dark" sticky="top">
       <Container fluid>
-        <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+        <Navbar.Brand href="/mainpage">Mask Stock</Navbar.Brand>
         <Nav className="me-auto">
-          <Nav.Link href="#home">Home</Nav.Link>
-          <Nav.Link href="#features">Features</Nav.Link>
-          <Nav.Link href="#pricing">Pricing</Nav.Link>
+          <Nav.Link href="/mainpage">Home</Nav.Link>
+          <Nav.Link href="/register">Register</Nav.Link>
+          <Nav.Link href="/login">Login</Nav.Link>
         </Nav>
         <Nav className="mr-auto">
           <Nav.Link>

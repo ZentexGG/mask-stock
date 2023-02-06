@@ -1,0 +1,7 @@
+.HomePage .LandinPage{
+    background: url('../../img/bg.jpeg');
+    height: 100px;
+}
+#root,body{
+    height: 100vh;
+}

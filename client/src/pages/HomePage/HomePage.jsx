@@ -1,14 +1,14 @@
 import React from 'react'
 import NavbarComponent from "../../components/NavbarComponent/NavbarComponent"
 import FooterComponent from "../../components/FooterComponent/FooterComponent"
+import RegisterFormComponent from "../../components/RegisterFormComponent/RegisterFormComponent"
+
 const HomePage=()=>{
   return (
     <div className="HomePage">
         <NavbarComponent/>
-        <div className="LandingPage">
-          
-        </div>
-        <FooterComponent className="fixed-bottom"/>
+        <RegisterFormComponent/>
+        <FooterComponent/>
     </div>
   )
 }

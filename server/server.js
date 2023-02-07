@@ -1,11 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
+const cors=require('cors')
 const app = express();
 
 const Stock = require("./schemas/stock.model");
 
 app.use(express.json());
+
+app.use(cors({origin:true,credentials: true}));
 const PORT = 8008;
 
 const connectToDB = (dbName) => {
@@ -51,3 +53,7 @@ app.listen(PORT, async () => {
   connectToDB("mask-stock");
   restockMasks();
 });
+app.post("/",(req,res)=>{
+  console.log(req.body)
+  res.send(req.body)
+})

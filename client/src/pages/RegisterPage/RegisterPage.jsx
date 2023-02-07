@@ -3,13 +3,13 @@ import NavbarComponent from "../../components/NavbarComponent/NavbarComponent"
 import FooterComponent from "../../components/FooterComponent/FooterComponent"
 import RegisterFormComponent from "../../components/RegisterFormComponent/RegisterFormComponent"
 
-const HomePage=()=>{
+const RegisterPage=()=>{
   return (
-    <div className="HomePage">
+    <div className="RegisterPage">
         <NavbarComponent/>
-        <FooterComponent/>
+        <RegisterFormComponent/>
     </div>
   )
 }
 
-export default HomePage
+export default RegisterPage

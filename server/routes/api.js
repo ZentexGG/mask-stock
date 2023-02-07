@@ -83,4 +83,22 @@ router.post("/order", async (req, res) => {
   );
 });
 
+router.put('/register',(req,res)=>{
+  let username=req.body['username']
+  let hospital=req.body['hospital']
+  hospital.map((e)=>{
+    Hospital.updateOne({name:e},
+      {$addToSet:{users:username}},
+      (err,docs)=>{
+        if (err){
+          console.log(err)
+        }
+        else{
+            console.log("Updated Docs : ", docs);
+        }
+      }
+    )
+  })
+})
+
 module.exports = router;

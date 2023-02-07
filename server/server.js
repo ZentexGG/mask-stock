@@ -23,5 +23,5 @@ app.use('/api', apiRouter);
 
 app.listen(PORT, async () => {
     console.log(`Server on http://127.0.0.1:${PORT}`);
-    connectToDB('mask-stock-remake');
+    connectToDB('mask-stock');
 })

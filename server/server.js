@@ -21,19 +21,21 @@ const restockMasks = async () => {
   const today = dateObj.getDate();
   if (today === 1) {
     console.log("Restocking masks...");
+    let currentStock = await Stock.find({
+      _id: "63e203ea099b00a399695ca9",
+    }).lean();
+    currentStock = currentStock[0]["stock"];
     await Stock.findOneAndUpdate(
       {
         _id: "63e203ea099b00a399695ca9",
       },
       {
-        stock: 10000
+        stock: currentStock + 10000,
       },
       {
         new: true,
       }
     );
-  } else {
-    console.log("Restocking masks not necessary");
   }
 };
 

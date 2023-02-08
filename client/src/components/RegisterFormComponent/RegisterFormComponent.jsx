@@ -1,26 +1,16 @@
 import {useState,useEffect} from 'react';
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBCard,
-  MDBCardBody,
-  MDBInput,
-  MDBCheckbox,
-  MDBValidation,
-  MDBValidationItem,
-  
-}
-from 'mdb-react-ui-kit';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import Chip from '@mui/material/Chip';
-import DeleteIcon from "@mui/icons-material/Delete"
 import './RegisterFormComponent.css'
-import { useNavigate,navi, Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import Container from "react-bootstrap/Container"
+import Form from "react-bootstrap/Form"
+import Button from 'react-bootstrap/Button';
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
+import InputGroup from 'react-bootstrap/InputGroup';
 
 function RegisterFormComponent() {
-    const [path,setPath]=useState("/register")
+    const [validated,setValidated]=useState(false)
+    const [error,setError]=useState(true)
     const navigate=useNavigate()
     const [username,setUsername]=useState("")
     const [email,setEmail]=useState("")
@@ -31,7 +21,8 @@ function RegisterFormComponent() {
     const [hospitals,setHospitals]=useState([])
     const handleSubmit=async (e)=>{
       e.preventDefault()
-        const response=await fetch('http://localhost:8008/api/register',{
+      
+        const response1=await fetch('http://localhost:8008/api/register',{
           method:"PUT",
           headers:{
             "Content-Type":"application/json"
@@ -41,11 +32,22 @@ function RegisterFormComponent() {
             hospital:checkedHospitals,
           })
       })
-      const data=await response.json()
-      setPath("/")
-      
-    }
-    const handleClick=()=>{
+      const response2=await fetch('http://localhost:8008/api/register',{
+        method:"post",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          username:username,
+          email:email,
+          password:password
+        })
+      })
+      navigate('/')
+
+      const data1=await response1.json()
+      const data2=await response1.json()
+
       
     }
     const getHospitals=async()=>{
@@ -75,6 +77,7 @@ function RegisterFormComponent() {
     }
     const handleCheck=(e)=>{
         setHospital(e)
+        setError(false)
     }
     useEffect(()=>{
       if(hospital){
@@ -90,62 +93,77 @@ function RegisterFormComponent() {
       }
   },[hospital])
   return (
-      <MDBValidation className='row g-3'onSubmit={(e)=>handleSubmit(e)}>
-    
-      <MDBContainer fluid className='d-flex align-items-center justify-content-center bg-image' style={{backgroundImage: 'url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp)'}}>
-            <div className='mask gradient-custom-3'></div>
-            <MDBCard className='m-5' style={{width: '450px'}}>
-              <MDBCardBody className='px-5'>
-                <h2 className="text-uppercase text-center mb-5">Create an account</h2>
-                <MDBValidationItem feedback='Username is required' invalid>
-                <MDBInput wrapperClass='mb-4' label='Your Name' size='lg' id='form1' type='text' required onChange={(e)=>setUsername(e.target.value)}/>
-                </MDBValidationItem>
-                <MDBValidationItem feedback='Email is Required' invalid>
-                <MDBInput wrapperClass='mb-4' label='Your Email' size='lg' id='form2' type='email' required onChange={(e)=>setEmail(e.target.value)}/>
-                </MDBValidationItem>
-                <MDBValidationItem feedback='Password is required' invalid>
-                <MDBInput wrapperClass='mb-4' label='Password' size='lg' id='form3' type='password' required onChange={(e)=>setPassword(e.target.value)}/>
-                </MDBValidationItem>
-                  {checkedHospitals?.map((e)=>{
-                      return(
-                        <Chip
-                        label={e}
-                        onDelete={()=>handleDelete(e)}
-                        deleteIcon={<DeleteIcon />}
-                        variant="outlined"
-                      />          
-                      )
-                  })}
-                <MDBValidationItem feedback='Hospital is required' invalid>
-              
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={hospital}
-                    label="Age"
-                    required
-                    onChange={(e)=>handleCheck(e.target.value)}
-                    sx={{width: "100%",height:50 }}
-                  >
-                    {
-                      uncheckedHospitals?.map((e,i)=>{
-                          return(
-                            <MenuItem key={i}value={e['name']}>{e["name"]}</MenuItem>
-                          )
-                      })
-                    }
-                  </Select>
-                  
-                  </MDBValidationItem>
-                <div className='d-flex flex-row justify-content-center mb-4'>
-                  <MDBCheckbox name='flexCheck' id='flexCheckDefault' label='I agree all statements in Terms of service' />
-                </div>
-                <Link to={path} ><MDBBtn className='mb-4 w-100 gradient-custom-4' style={{maxHeight: '45px'}} size='lg'>Register</MDBBtn></Link>
-              </MDBCardBody>
-            </MDBCard>
-      </MDBContainer>
-      </MDBValidation>
-      
+<Form noValidate validated={validated} onSubmit={handleSubmit}>
+      <Row className="mb-3">
+        <Form.Group as={Col} md="4" controlId="validationCustom01">
+          <Form.Label>First name</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            placeholder="First name"
+            defaultValue="Mark"
+          />
+          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} md="4" controlId="validationCustom02">
+          <Form.Label>Last name</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            placeholder="Last name"
+            defaultValue="Otto"
+          />
+          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} md="4" controlId="validationCustomUsername">
+          <Form.Label>Username</Form.Label>
+          <InputGroup hasValidation>
+            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+            <Form.Control
+              type="text"
+              placeholder="Username"
+              aria-describedby="inputGroupPrepend"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              Please choose a username.
+            </Form.Control.Feedback>
+          </InputGroup>
+        </Form.Group>
+      </Row>
+      <Row className="mb-3">
+        <Form.Group as={Col} md="6" controlId="validationCustom03">
+          <Form.Label>City</Form.Label>
+          <Form.Control type="text" placeholder="City" required />
+          <Form.Control.Feedback type="invalid">
+            Please provide a valid city.
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} md="3" controlId="validationCustom04">
+          <Form.Label>State</Form.Label>
+          <Form.Control type="text" placeholder="State" required />
+          <Form.Control.Feedback type="invalid">
+            Please provide a valid state.
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} md="3" controlId="validationCustom05">
+          <Form.Label>Zip</Form.Label>
+          <Form.Control type="text" placeholder="Zip" required />
+          <Form.Control.Feedback type="invalid">
+            Please provide a valid zip.
+          </Form.Control.Feedback>
+        </Form.Group>
+      </Row>
+      <Form.Group className="mb-3">
+        <Form.Check
+          required
+          label="Agree to terms and conditions"
+          feedback="You must agree before submitting."
+          feedbackType="invalid"
+        />
+      </Form.Group>
+      <Button type="submit">Submit form</Button>
+    </Form>
   );
 }
 

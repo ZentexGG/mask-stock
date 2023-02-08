@@ -1,8 +1,11 @@
+require('dotenv').config()
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+const { cookieJwtAuth } = require("../middleware/cookieJwtAuth")
 
 const User = require("../schemas/account.model");
 const Order = require("../schemas/order.model");
@@ -10,6 +13,8 @@ const Hospital = require("../schemas/hospital.model");
 const Stock = require("../schemas/stock.model");
 
 const router = express.Router();
+
+router.use(cookieParser());
 
 router.get("/hospitals", async (req, res) => {
   const hospitals = await Hospital.find({}).lean();
@@ -46,25 +51,33 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", (req, res, next) => {
-  passport.authenticate("local", { session: false }, (error, user, info) => {
-    if (error || !user) {
-      return res.status(400).json({
-        message: "Incorrect username or password",
-        user: user,
-      });
-    }
-
-    req.login(user, { session: false }, (error) => {
-      if (error) {
-        return res.send(error);
+router.post("/login", async (req, res) => {
+  let { username, password } = req.body;
+  let query = await User.find({ username: username }).lean();
+  if (query.length > 0) {
+    bcrypt.compare(password, query[0]["password"], (err, result) => {
+      // AICI AI REUSIT SA TE LOGEZI
+      if (result) {
+        const token = jwt.sign(req.body, process.env.ACCESS_TOKEN_SECRET, {
+          expiresIn: "20s",
+        });
+        res.cookie("token", token, { 
+          httpOnly: true,
+          
+        });
+        // res.redirect("http://localhost:3000");
+        res.send(token);
       }
-
-      const token = jwt.sign(user.toJSON(), process.env.ACCESS_TOKEN_SECRET);
-
-      return res.json({ user, token });
     });
-  })(req, res, next);
+  } else {
+    // AICI E LOGIN FAILED
+    // res.redirect("http://localhost:3000/register");
+    res.send(false);
+  }
+});
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("token").json({ success: true });
 });
 
 router.post("/order", async (req, res) => {
@@ -83,22 +96,22 @@ router.post("/order", async (req, res) => {
   );
 });
 
-router.put('/register',(req,res)=>{
-  let username=req.body['username']
-  let hospital=req.body['hospital']
-  hospital.map((e)=>{
-    Hospital.updateOne({name:e},
-      {$addToSet:{users:username}},
-      (err,docs)=>{
-        if (err){
-          console.log(err)
-        }
-        else{
-            console.log("Updated Docs : ", docs);
+router.put("/register", (req, res) => {
+  let username = req.body["username"];
+  let hospital = req.body["hospital"];
+  hospital.map((e) => {
+    Hospital.updateOne(
+      { name: e },
+      { $addToSet: { users: username } },
+      (err, docs) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Updated Docs : ", docs);
         }
       }
-    )
-  })
-})
+    );
+  });
+});
 
 module.exports = router;

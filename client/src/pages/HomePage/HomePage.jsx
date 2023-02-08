@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import NavbarComponent from "../../components/NavbarComponent/NavbarComponent"
 import FooterComponent from "../../components/FooterComponent/FooterComponent"
-import RegisterFormComponent from "../../components/RegisterFormComponent/RegisterFormComponent"
+import LoginFormComponent from "../../components/LoginFormComponent/LoginFormComponent"
 import './HomePage.css'
 import Container from 'react-bootstrap/esm/Container'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/esm/Button'
 import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 const HomePage=()=>{
   const [path,setPath]=useState("")
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   useEffect(()=>{
     if(path)
     {
@@ -21,7 +22,7 @@ const HomePage=()=>{
   return (
     <div className="HomePage">
         <NavbarComponent/>
-        <Container id="main"fluid style={{textAlign:"center",height:"73.5vh",alignItems:"center",display:"grid",margin:0}}>
+        {/* <Container id="main"fluid style={{textAlign:"center",height:"73.5vh",alignItems:"center",display:"grid",margin:0}}>
             <Container style={{maxWidth:"65%"}}>
             <Row> 
               <Col>
@@ -41,10 +42,11 @@ const HomePage=()=>{
               </Col>
             </Row>
             </Container>
-        </Container>
+        </Container> */}
+        <LoginFormComponent />
         <FooterComponent/>  
     </div>
   )
 }
 
-export default HomePage
+export default HomePage;

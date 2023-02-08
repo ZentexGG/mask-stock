@@ -1,6 +1,9 @@
 import {useState,useEffect} from 'react';
 import './RegisterFormComponent.css'
 import { useNavigate } from 'react-router-dom';
+import Chip from "@mui/material/Chip"
+import DeleteIcon from "@mui/icons-material/Delete"
+import FloatingLabel from "react-bootstrap/FloatingLabel"
 import Container from "react-bootstrap/Container"
 import Form from "react-bootstrap/Form"
 import Button from 'react-bootstrap/Button';
@@ -9,7 +12,7 @@ import Col from "react-bootstrap/Col"
 import InputGroup from 'react-bootstrap/InputGroup';
 
 function RegisterFormComponent() {
-    const [validated,setValidated]=useState(false)
+    const [validated,setValid]=useState(false)
     const [error,setError]=useState(true)
     const navigate=useNavigate()
     const [username,setUsername]=useState("")
@@ -21,6 +24,19 @@ function RegisterFormComponent() {
     const [hospitals,setHospitals]=useState([])
     const handleSubmit=async (e)=>{
       e.preventDefault()
+      const form = e.currentTarget;
+      if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+      setValid(true);
+      }
+    if (form.checkValidity() === true) {
+      setValid(true);
+      e.preventDefault();
+      console.log('e valid')
+      // TODO FETCH IN DB
+    }
+
       
         const response1=await fetch('http://localhost:8008/api/register',{
           method:"PUT",
@@ -60,24 +76,24 @@ function RegisterFormComponent() {
         getHospitals()    
     },[])
     const handleDelete=(e)=>{
-      let hospitalss=checkedHospitals.filter((element)=>{
+      let checked=checkedHospitals.filter((element)=>{
+        console.log(element)
         if(element!==e)
         {
-          return element
+          return element 
         }
       })
-      setCheckedHospitals(hospitalss)
-      hospitals.map((e)=>{
-        if(e['name']===hospital)
+      setCheckedHospitals(checked)
+      let unchecked=hospitals.filter((element)=>{
+        if(element['name']===e)
         {
-          setUncheckedHospitals([...uncheckedHospitals,e])
+          return e 
         }
       })
-
+      setUncheckedHospitals([...uncheckedHospitals,unchecked[0]])
     }
     const handleCheck=(e)=>{
         setHospital(e)
-        setError(false)
     }
     useEffect(()=>{
       if(hospital){
@@ -93,77 +109,74 @@ function RegisterFormComponent() {
       }
   },[hospital])
   return (
-<Form noValidate validated={validated} onSubmit={handleSubmit}>
-      <Row className="mb-3">
-        <Form.Group as={Col} md="4" controlId="validationCustom01">
-          <Form.Label>First name</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="First name"
-            defaultValue="Mark"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+    <Container id="Container">
+      <Form noValidate validated={validated} onSubmit={(e)=>{handleSubmit(e)}}> 
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <FloatingLabel
+        controlId="floatingInput"
+        label="Email address"
+        className="mb-3"
+         >
+          <Form.Control type="email" placeholder="Enter email" required/>
+        </FloatingLabel>
+          <Form.Text className="text-muted">
+            We'll never share your email with anyone else.
+          </Form.Text>
+        </Form.Group>     
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <FloatingLabel
+        controlId="floatingInput"
+        label="Email address"
+        className="mb-3"
+         >
+          <Form.Control type="email" placeholder="Enter email" required/>
+        </FloatingLabel>
+          <Form.Text className="text-muted">
+            We'll never share your email with anyone else.
+          </Form.Text>
         </Form.Group>
-        <Form.Group as={Col} md="4" controlId="validationCustom02">
-          <Form.Label>Last name</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Last name"
-            defaultValue="Otto"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <FloatingLabel
+        controlId="floatingInput"
+        label="Password"
+        className="mb-3"
+         >
+          <Form.Control type="email" placeholder="Enter email" required/>
+        </FloatingLabel>
+          <Form.Text className="text-muted">
+            We'll never share your email with anyone else.
+          </Form.Text>
         </Form.Group>
-        <Form.Group as={Col} md="4" controlId="validationCustomUsername">
-          <Form.Label>Username</Form.Label>
-          <InputGroup hasValidation>
-            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-            <Form.Control
-              type="text"
-              placeholder="Username"
-              aria-describedby="inputGroupPrepend"
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Please choose a username.
-            </Form.Control.Feedback>
-          </InputGroup>
+        <Form.Group className="mb-3" controlId="select">
+        <Container>
+        {checkedHospitals?.map((e)=>{
+                      return(
+                        <Chip
+                        label={e}
+                        onDelete={()=>handleDelete(e)}
+                        deleteIcon={<DeleteIcon />}
+                        variant="outlined"
+                      />          
+                      )
+                  })}
+        </Container>
+        <Form.Select size="lg" label="Choose a hospital" required defaultValue="Choose a hospital" onChange={(e)=>{handleCheck(e.target.value)}}>
+          <option value="">Select the hospitals</option>
+          {
+            uncheckedHospitals.map((e)=>{
+              return(
+                <option value={e['name']}>{e['name']}</option>
+              )
+            })
+          }
+        </Form.Select>
+        
         </Form.Group>
-      </Row>
-      <Row className="mb-3">
-        <Form.Group as={Col} md="6" controlId="validationCustom03">
-          <Form.Label>City</Form.Label>
-          <Form.Control type="text" placeholder="City" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid city.
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md="3" controlId="validationCustom04">
-          <Form.Label>State</Form.Label>
-          <Form.Control type="text" placeholder="State" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid state.
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md="3" controlId="validationCustom05">
-          <Form.Label>Zip</Form.Label>
-          <Form.Control type="text" placeholder="Zip" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid zip.
-          </Form.Control.Feedback>
-        </Form.Group>
-      </Row>
-      <Form.Group className="mb-3">
-        <Form.Check
-          required
-          label="Agree to terms and conditions"
-          feedback="You must agree before submitting."
-          feedbackType="invalid"
-        />
-      </Form.Group>
-      <Button type="submit">Submit form</Button>
-    </Form>
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
+      </Form>
+    </Container>
   );
 }
 

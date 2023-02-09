@@ -1,7 +1,9 @@
 #box{
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
+    width:30%;
 }
 body #root #box input{
+
     border:0;
     border-bottom:1px solid white;  
     background:transparent;
@@ -23,4 +25,16 @@ h1{
     justify-content: center;
 }
 
+@media only screen and (max-width: 700px) {
+    #box {
+      width: 60%;
+    }
+  }
   
+  @media only screen and (max-width: 950px) {
+    #box {
+      width: 70%;
+      
+      
+    }
+  }

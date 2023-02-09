@@ -110,34 +110,31 @@ function RegisterFormComponent() {
       <Form noValidate id='box' validated={validated} onSubmit={(e)=>{handleSubmit(e)}} style={{textAlign:"center",width:"70%",padding:"2rem 1rem 1rem 1rem"}}> 
       <h1 className="mb-5 card-title">Register</h1>
         <Form.Group className="mb-3" controlId="formBasicEmail">
-        <FloatingLabel
-        id="float"
-        controlId="floatingInput"
-        label="Username"
-        className="mb-5"
-         >
-          <Form.Control type="email" placeholder="Enter email" required/>
-        </FloatingLabel>
+        <Form.Floating className="mb-5">
+        <Form.Control
+          id="floatingInputCustom"
+          type="username"
+        />
+        <label id="float" htmlFor="floatingInputCustom" style={{paddingTop:"10px"}}>Username</label>
+      </Form.Floating>
         </Form.Group>     
         <Form.Group className="mb-3" controlId="formBasicEmail">
-        <FloatingLabel
-        id="float"
-        controlId="floatingInput"
-        label="Email address"
-        className="mb-5"
-         >
-          <Form.Control type="email" placeholder="Enter email" required/>
-        </FloatingLabel>
+        <Form.Floating className="mb-5">
+        <Form.Control
+          id="floatingInputCustom"
+          type="email"
+        />
+        <label id="float" htmlFor="floatingInputCustom" style={{paddingTop:"10px"}}>Email address</label>
+      </Form.Floating>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
-        <FloatingLabel
-        id="float"
-        controlId="floatingInput"
-        label="Password"
-        className="mb-5"
-         >
-          <Form.Control type="email" placeholder="Enter email" required/>
-        </FloatingLabel>
+        <Form.Floating className="mb-5">
+        <Form.Control
+          id="floatingInputCustom"
+          type="password"
+        />
+        <label id="float" htmlFor="floatingInputCustom" style={{paddingTop:"10px"}}>Password</label>
+      </Form.Floating>
         </Form.Group>
         <Form.Group className="mb-3" controlId="select">
         <Container>

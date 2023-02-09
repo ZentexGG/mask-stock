@@ -9,7 +9,7 @@
     -webkit-appearance: none;
 }
 select option{
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -17,4 +17,10 @@ select option{
 }
 select.decorated option:hover {
     box-shadow: 0 0 10px 100px #1882A8 inset;
+}
+#box{
+    border-radius: 10px;
+}
+#root{
+    background-color: rgb(66, 107, 143);
 }

@@ -42,7 +42,7 @@ const HomePage=()=>{
             <Row> 
               <Col>
               <h1>
-                Welcome to our website! If you don't already have an account you can register by pressing the button register.
+                Welcome to our website! If you don't already have an account you can register by pressing the register button.
                 </h1>
               </Col>
             </Row>
@@ -50,10 +50,10 @@ const HomePage=()=>{
             <Container fluid style={{height:"100%",display:"grid",alignItems:"baseline",maxWidth:"65%"}}>
             <Row>
               <Col>
-              <Button variant="primary" style={{width:"40%",height:'130%'}} onClick={()=>setPath('/register')}>Register</Button>
+              <Button variant="primary" size="lg" style={{width:"40%",height:'130%'}} onClick={()=>setPath('/register')}>Register</Button>
               </Col>
               <Col>
-              <Button variant="primary" style={{width:"40%",height:'130%'}} onClick={()=>setPath("/login")}>Login</Button>
+              <Button variant="primary" size="lg" style={{width:"40%",height:'130%'}} onClick={()=>setPath("/login")}>Login</Button>
               </Col>
             </Row>
             </Container>

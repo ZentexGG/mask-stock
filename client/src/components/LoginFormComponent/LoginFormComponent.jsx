@@ -1,15 +1,12 @@
 import Button from "react-bootstrap/Button";
-import PageHeader from "react-bootstrap/PageItem";
 import Form from "react-bootstrap/Form";
 import { useState, useRef } from "react";
 import axios from "axios"
-import FloatingLabel from "react-bootstrap/FloatingLabel";
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import "./LoginFormComponent.css";
 function LoginFormComponent() {
-  const input = useRef();
-  const input2 = useRef();
+  const userInput = useRef();
+  const passInput = useRef();
   const navigate=useNavigate()
   const [validated, setValid] = useState(false);
   const getCookie = async () => {
@@ -26,8 +23,8 @@ function LoginFormComponent() {
       const { data } = await axios.post(
         "http://localhost:8008/api/login",
         {
-          username: input.current.value,
-          password: input2.current.value
+          username: userInput.current.value,
+          password: passInput.current.value
         },
         { withCredentials: true }
       );
@@ -37,8 +34,6 @@ function LoginFormComponent() {
     }
   };
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const handleSubmit = async (e) => {
     const form = e.currentTarget;
     e.preventDefault();
@@ -79,7 +74,7 @@ function LoginFormComponent() {
         <Form.Group className="mb-3"   >
           <Form.Floating className="mb-5">
             <Form.Control
-              ref={input}
+              ref={userInput}
               id="floatingInputCustom"
               type="username"
               required
@@ -95,7 +90,7 @@ function LoginFormComponent() {
         </Form.Group>
         <Form.Group className="mb-3"   >
           <Form.Floating className="mb-5">
-            <Form.Control ref={input2}id="floatingInputCustom" type="password" required />
+            <Form.Control ref={passInput}id="floatingInputCustom" type="password" required />
             <label
               id="float"
               htmlFor="floatingInputCustom"

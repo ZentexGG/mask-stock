@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Row from "react-bootstrap/Row";
-import Badge from 'react-bootstrap/Badge';
 import ListGroup from "react-bootstrap/ListGroup";
 import { useNavigate } from "react-router-dom";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
 
 function OrderFormComponent({ quantity, name }) {
   const [hospitals, setHospitals] = useState([]);
-  const [validated, setValidated] = useState(false);
-  const [selectedHospital, setSelectedHospital] = useState(null)
+  const [selectedHospital, setSelectedHospital] = useState(null);
   const navigate = useNavigate();
-
-  
 
   const getHospitals = async () => {
     try {
@@ -36,7 +28,7 @@ function OrderFormComponent({ quantity, name }) {
   };
   useEffect(() => {
     getHospitals();
-  }, [hospitals])
+  }, [hospitals]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,40 +41,40 @@ function OrderFormComponent({ quantity, name }) {
         quantity: quantity,
         hospital: selectedHospital,
       }),
-    })
-    response = await response.json()
-    navigate('/success')
-
+    });
+    response = await response.json();
+    navigate("/success");
   };
 
   const handleSelect = (e) => {
-    setSelectedHospital(e.target.childNodes[e.target.selectedIndex].innerText)
-  }
+    setSelectedHospital(e.target.childNodes[e.target.selectedIndex].innerText);
+  };
 
   return (
     <>
       <Form
         noValidate
-        validated={validated}
         onSubmit={handleSubmit}
         id="box"
         className="p-4"
       >
-      <ListGroup as="ul">
-        <ListGroup.Item
-          as="li"
-        >
-          <div className="ms-2 me-auto">
+        <ListGroup as="ul">
+          <ListGroup.Item as="li">
+            <div className="ms-2 me-auto">
               <div className="fw-bold">{quantity} x Face Mask Box</div>
-            100 piece Face Mask Box
-          </div>
-        </ListGroup.Item>
-        </ListGroup> <br />
-          <Form.Select required onChange={handleSelect}>
+              100 piece Face Mask Box
+            </div>
+          </ListGroup.Item>
+        </ListGroup>{" "}
+        <br />
+        <Form.Select required onChange={handleSelect}>
           {!selectedHospital && <option>Select your hospital...</option>}
-            {hospitals?.map((e, i) => <option key={i}>{e['name']}</option>)}
-          </Form.Select> <br />
-        {selectedHospital && <Button type="submit" >Place order</Button>}
+          {hospitals?.map((e, i) => (
+            <option key={i}>{e["name"]}</option>
+          ))}
+        </Form.Select>{" "}
+        <br />
+        {selectedHospital && <Button type="submit">Place order</Button>}
       </Form>
     </>
   );

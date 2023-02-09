@@ -7,9 +7,6 @@ import FloatingLabel from "react-bootstrap/FloatingLabel"
 import Container from "react-bootstrap/Container"
 import Form from "react-bootstrap/Form"
 import Button from 'react-bootstrap/Button';
-import Row from "react-bootstrap/Row"
-import Col from "react-bootstrap/Col"
-import InputGroup from 'react-bootstrap/InputGroup';
 
 function RegisterFormComponent() {
     const [validated,setValid]=useState(false)
@@ -109,43 +106,38 @@ function RegisterFormComponent() {
       }
   },[hospital])
   return (
-    <Container id="Container">
-      <Form noValidate validated={validated} onSubmit={(e)=>{handleSubmit(e)}}> 
+    <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+      <Form noValidate id='box' validated={validated} onSubmit={(e)=>{handleSubmit(e)}} style={{textAlign:"center",width:"70%",padding:"2rem 1rem 1rem 1rem"}}> 
+      <h1 className="mb-5 card-title">Register</h1>
         <Form.Group className="mb-3" controlId="formBasicEmail">
         <FloatingLabel
+        id="float"
         controlId="floatingInput"
-        label="Email address"
-        className="mb-3"
+        label="Username"
+        className="mb-5"
          >
           <Form.Control type="email" placeholder="Enter email" required/>
         </FloatingLabel>
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
         </Form.Group>     
         <Form.Group className="mb-3" controlId="formBasicEmail">
         <FloatingLabel
+        id="float"
         controlId="floatingInput"
         label="Email address"
-        className="mb-3"
+        className="mb-5"
          >
           <Form.Control type="email" placeholder="Enter email" required/>
         </FloatingLabel>
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
         <FloatingLabel
+        id="float"
         controlId="floatingInput"
         label="Password"
-        className="mb-3"
+        className="mb-5"
          >
           <Form.Control type="email" placeholder="Enter email" required/>
         </FloatingLabel>
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
         </Form.Group>
         <Form.Group className="mb-3" controlId="select">
         <Container>
@@ -160,7 +152,7 @@ function RegisterFormComponent() {
                       )
                   })}
         </Container>
-        <Form.Select size="lg" label="Choose a hospital" required defaultValue="Choose a hospital" onChange={(e)=>{handleCheck(e.target.value)}}>
+        <Form.Select size="sm" label="Choose a hospital" required defaultValue="Choose a hospital" onChange={(e)=>{handleCheck(e.target.value)}} id="select" className='mb-4'>
           <option value="">Select the hospitals</option>
           {
             uncheckedHospitals.map((e)=>{
@@ -176,7 +168,7 @@ function RegisterFormComponent() {
           Submit
         </Button>
       </Form>
-    </Container>
+      </div>
   );
 }
 

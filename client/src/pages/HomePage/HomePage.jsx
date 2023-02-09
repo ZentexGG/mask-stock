@@ -22,7 +22,7 @@ const HomePage=()=>{
   return (
     <div className="HomePage">
         <NavbarComponent/>
-        {/* <Container id="main"fluid style={{textAlign:"center",height:"73.5vh",alignItems:"center",display:"grid",margin:0}}>
+        <Container id="main"fluid style={{textAlign:"center",height:"73.5vh",alignItems:"center",display:"grid",margin:0}}>
             <Container style={{maxWidth:"65%"}}>
             <Row> 
               <Col>
@@ -42,8 +42,7 @@ const HomePage=()=>{
               </Col>
             </Row>
             </Container>
-        </Container> */}
-        <LoginFormComponent />
+        </Container>
         <FooterComponent/>  
     </div>
   )

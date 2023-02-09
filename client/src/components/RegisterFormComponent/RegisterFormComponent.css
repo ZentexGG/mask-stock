@@ -1,0 +1,20 @@
+#select{
+    border:0;
+    border-bottom:1px solid white;  
+    background:transparent;
+    width:100%;
+    padding:8px 0 5px 0;
+    font-size:16px;
+    color:#fff;
+    -webkit-appearance: none;
+}
+select option{
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 250px;
+}
+select.decorated option:hover {
+    box-shadow: 0 0 10px 100px #1882A8 inset;
+}

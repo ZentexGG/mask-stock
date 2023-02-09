@@ -1,4 +1,3 @@
-
 import NavbarComponent from "../../components/NavbarComponent/NavbarComponent"
 import RegisterFormComponent from "../../components/RegisterFormComponent/RegisterFormComponent"
 import axios from "axios";
@@ -20,12 +19,14 @@ const RegisterPage=()=>{
   }
   useLayoutEffect(()=>{
     getCookie()
+    console.log(name)
   },[])
+
   return (
-        <>
+        !name&&<>
         <NavbarComponent/>
         <RegisterFormComponent/>
-        </>  
+        </> ||navigate("/main")
   )
 }
 

@@ -31,6 +31,7 @@ function RegisterFormComponent() {
         })
       })
       const data1=await response.json()
+      console.log(data1)
     }
     const postRequest=async ()=>{
       const response2=await fetch('http://localhost:8008/api/register',{
@@ -45,6 +46,7 @@ function RegisterFormComponent() {
         })
       })
       const data2=await response2.json()
+      console.log(data2)
       console.log(data2)
     }
     const handleSubmit=async (e)=>{
@@ -137,7 +139,7 @@ function RegisterFormComponent() {
         <Form.Control
           id="floatingInputCustom"
               type="password"
-              minLength={8}
+              minLength={1}
               onChange={(e) => { setPassword(e.target.value) }}
         />
         <label id="float" htmlFor="floatingInputCustom" style={{paddingTop:"10px"}}>Password</label>

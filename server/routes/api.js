@@ -7,6 +7,8 @@ const bcrypt = require("bcrypt");
 const uuid = require('uuid').v4;
 const easyinvoice = require('easyinvoice');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
+const path = require('path');
 
 const User = require("../schemas/account.model");
 
@@ -22,7 +24,7 @@ router.use(
     saveUninitialized: false,
     secret: process.env.ACCESS_TOKEN_SECRET,
     cookie: {
-      maxAge: 1000 * 60 * 60,
+      maxAge: 1000 * 60 * 60 * 60,
       sameSite: "lax",
       secure: false,
     }
@@ -102,21 +104,22 @@ router.get("/login", async (req, res) => {
    }
 })
 
-router.post("/logout", (req, res) => {
-
+router.get("/logout", async (req, res) => {
+  req.session.destroy()
+  res.send({ message: "Cookie cleared successfully" }).status(201);
 });
+
+router.get("/success", async (req, res) => {
+  res.send({message: "Order submited succesfully"}).status(201)
+})
 
 router.post("/order", async (req, res) => {
   const dateObj = new Date();
   const today = `${dateObj.getDate()}-${dateObj.getMonth() + 1
     }-${dateObj.getFullYear()}`;
-  function addDays(date, days) {
-    let result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return `${result.getDate()}-${result.getMonth() + 1}-${result.getFullYear()}`;
-  }
   let userOrder = req.body;
   userOrder["date"] = today;
+  userOrder['price'] = 300;
   userOrder['orderNumber'] = uuid();
   userOrder['orderNumber'] = userOrder['orderNumber'].split("-")[0];
   let hospitalCountry = await Hospital.find({ name: req.body.hospital }).lean();
@@ -153,14 +156,43 @@ router.post("/order", async (req, res) => {
         "price": userOrder['price'],
         "description": "Box of Masks (100 pcs)"
       }
-    ]
+    ],
+    "bottomNotice": "Kindly pay your invoice within 15 days.",
+    "settings": {
+      "currency": "EUR",
+      "margin-top": 25, 
+         "margin-right": 25, 
+         "margin-left": 25, 
+      "margin-bottom": 25,
+         "format": "A4",
+         "height": "1000px",
+         "width": "500px", 
+         "orientation": "landscape",
+    }
   }
 
   easyinvoice.createInvoice(invoiceData, function (result) {
     fs.writeFileSync("invoice.pdf", result.pdf, "base64");
   });
+  let currentStock = await Stock.find({}).lean();
+  currentStock = currentStock[0]["stock"];
+  await Stock.findOneAndUpdate(
+    {
+      price: 300,
+    },
+    {
+      stock: currentStock - userOrder['quantity']
+    },
+    {
+      new: true,
+    }
+  );
   
 });
+
+router.get("/invoice", (req, res) => {
+  res.download(path.join(__dirname, '..', 'invoice.pdf'))
+})
 
 router.put("/register", (req, res) => {
   let username = req.body["username"];

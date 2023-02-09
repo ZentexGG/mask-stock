@@ -1,85 +1,91 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
+import React, { useState, useEffect } from "react";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import Row from "react-bootstrap/Row";
+import Badge from 'react-bootstrap/Badge';
+import ListGroup from "react-bootstrap/ListGroup";
+import { useNavigate } from "react-router-dom";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
 
-function OrderFormComponent() {
+function OrderFormComponent({ quantity, name }) {
+  const [hospitals, setHospitals] = useState([]);
   const [validated, setValidated] = useState(false);
+  const [selectedHospital, setSelectedHospital] = useState(null)
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
+  
+
+  const getHospitals = async () => {
+    try {
+      const response = await fetch("http://localhost:8008/api/hospitals", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: name,
+        }),
+      });
+      const data = await response.json();
+      setHospitals(data);
+    } catch (error) {
+      console.log(error);
     }
+  };
+  useEffect(() => {
+    getHospitals();
+  }, [hospitals])
 
-    setValidated(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let response = await fetch("http://localhost:8008/api/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        quantity: quantity,
+        hospital: selectedHospital,
+      }),
+    })
+    response = await response.json()
+    navigate('/success')
+
   };
 
-  return (
-    <Form noValidate validated={validated} onSubmit={handleSubmit} id="box" className='p-4'>
-      <Row className="mb-3">
-        <Form.Group as={Col} md="6" controlId="validationCustom01">
-          <Form.Label id='float'>First name</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="First name"
-            defaultValue="Mark"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md="6" controlId="validationCustom01">
-          <Form.Label>First name</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="First name"
-            defaultValue="Mark"
-          />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-        </Form.Group>
-        
-      </Row>
-      <Row className="mb-3">
-        <Form.Group as={Col} md="6" controlId="validationCustom03">
-          <Form.Label>City</Form.Label>
-          <Form.Control type="text" placeholder="City" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid city.
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md="3" controlId="validationCustom04">
-          <Form.Label>State</Form.Label>
-          <Form.Control type="text" placeholder="State" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid state.
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md="3" controlId="validationCustom05">
-          <Form.Label>Zip</Form.Label>
-          <Form.Control type="text" placeholder="Zip" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid zip.
-          </Form.Control.Feedback>
-        </Form.Group>
-      </Row>
-      <Row className="mb-3">
-        <Form.Group as={Col}  controlId="validationCustom03">
-          <Form.Label>Street</Form.Label>
-          <Form.Control type="text" placeholder="Street" required />
-          <Form.Control.Feedback type="invalid">
-            Please provide a valid city.
-          </Form.Control.Feedback>
-        </Form.Group>
-      </Row>
+  const handleSelect = (e) => {
+    setSelectedHospital(e.target.childNodes[e.target.selectedIndex].innerText)
+  }
 
-      
-      <Button type="submit">Submit form</Button>
-    </Form>
+  return (
+    <>
+      <Form
+        noValidate
+        validated={validated}
+        onSubmit={handleSubmit}
+        id="box"
+        className="p-4"
+      >
+      <ListGroup as="ul">
+        <ListGroup.Item
+          as="li"
+        >
+          <div className="ms-2 me-auto">
+              <div className="fw-bold">{quantity} x Face Mask Box</div>
+            100 piece Face Mask Box
+          </div>
+        </ListGroup.Item>
+        </ListGroup> <br />
+          <Form.Select required onChange={handleSelect}>
+          {!selectedHospital && <option>Select your hospital...</option>}
+            {hospitals?.map((e, i) => <option key={i}>{e['name']}</option>)}
+          </Form.Select> <br />
+        {selectedHospital && <Button type="submit" >Place order</Button>}
+      </Form>
+    </>
   );
 }
 
-export default OrderFormComponent
+export default OrderFormComponent;

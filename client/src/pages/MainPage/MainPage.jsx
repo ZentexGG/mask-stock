@@ -2,10 +2,23 @@ import React, {useState,useRef,useEffect, useLayoutEffect} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import NavbarComponent from "../../components/NavbarComponent/NavbarComponent"
+import { Card } from 'react-bootstrap'
+import CardComponent from '../../components/CardComponent/CardComponent'
+import OrderFormComponent from '../../components/OrderFormComponent/OrderFormComponent'
 
-
-export default function MainPage({setQuantity}) {
-    const [name, setName] = useState("")
+export default function MainPage() {
+  const [name, setName] = useState("")
+  const [cardVisible, setCardVisible] = useState(true);
+  const [orderForm, setOrderForm] = useState(false);
+  const [quantity, setQuantity] = useState(0);
+  const handleClick = (e, maskQuantity) => {
+    setQuantity(maskQuantity);
+    if (quantity <= 0) {
+      return
+    }
+    setCardVisible(false);
+    setOrderForm(true);
+  };
     const navigate=useNavigate('')
     
     const getCookie = async () => {
@@ -26,9 +39,8 @@ export default function MainPage({setQuantity}) {
   return (
     name&&<>
     <NavbarComponent name={name}/>
-    
-    <input onChange={(e)=>setQuantity(e.target.value)} type number></input>
-    <Link to="/order">daaa</Link>
+      {cardVisible && <CardComponent order={handleClick} />}
+      {orderForm && <OrderFormComponent quantity={quantity} name={name} />}
     </>||navigate("/")
   )
 }

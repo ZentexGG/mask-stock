@@ -131,7 +131,14 @@ router.post("/order", async (req, res) => {
       registeredOrder: value,
     })
   );
+  let dueDateObj = new Date()
+  dueDateObj.setDate(dateObj.getDate() + 15)
+  let dueDate = `${dueDateObj.getDate()}-${dueDateObj.getMonth() + 1
+    }-${dueDateObj.getFullYear()}`;
   let invoiceData = {
+    "images": {
+      "logo": "https://infofer.ro/images/sigle_clienti/cfrcalatori.png"
+    },
     "client": {
       "company": userOrder['hospital'],
       "country": hospitalCountry
@@ -145,7 +152,8 @@ router.post("/order", async (req, res) => {
     },
     "information": {
       "number": userOrder['orderNumber'],
-      "date": today
+      "date": today,
+      "due-date": dueDate
     },
     "products": [
       {
@@ -158,14 +166,6 @@ router.post("/order", async (req, res) => {
     "bottomNotice": "Kindly pay your invoice within 15 days.",
     "settings": {
       "currency": "EUR",
-      "margin-top": 25, 
-         "margin-right": 25, 
-         "margin-left": 25, 
-      "margin-bottom": 25,
-         "format": "A4",
-         "height": "1000px",
-         "width": "500px", 
-         "orientation": "landscape",
     }
   }
 

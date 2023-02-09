@@ -1,30 +1,34 @@
-import React, {useState,useRef,useEffect} from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, {useState,useRef,useEffect, useLayoutEffect} from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import NavbarComponent from "../../components/NavbarComponent/NavbarComponent"
 
 
-export default function MainPage() {
+export default function MainPage({setQuantity}) {
     const [name, setName] = useState("")
     const navigate=useNavigate('')
     
     const getCookie = async () => {
       try {
         const {data} = await axios.get('http://localhost:8008/api/login', { withCredentials: true })
-        console.log(data)
-        setName(data.message)        
+        setName(data.message)  
       }
       catch (error) {
+        navigate("/")
         console.log(error);
       }
     
     }
-    getCookie()
+    useLayoutEffect(()=>{
+      getCookie()
+    },[])
     
   return (
-    <>
-    <NavbarComponent/>
-    <div>{name ? name:navigate('/')}</div>
-    </>
+    name&&<>
+    <NavbarComponent name={name}/>
+    
+    <input onChange={(e)=>setQuantity(e.target.value)} type number></input>
+    <Link to="/order">daaa</Link>
+    </>||navigate("/")
   )
 }

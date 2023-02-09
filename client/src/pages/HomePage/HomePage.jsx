@@ -8,10 +8,26 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/esm/Button'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { useLayoutEffect } from 'react'
 
 const HomePage=()=>{
   const [path,setPath]=useState("")
+  const [name,setName]=useState("")
   const navigate = useNavigate()
+  const getCookie = async () => {
+    try {
+      const {data} = await axios.get('http://localhost:8008/api/login', { withCredentials: true })
+      setName(data.message)  
+    }
+    catch (error) {
+      console.log(error);
+    }
+  
+  }
+  useLayoutEffect(()=>{
+    getCookie()
+  },[])
   useEffect(()=>{
     if(path)
     {
@@ -19,7 +35,7 @@ const HomePage=()=>{
     }
   },[path])
   return (
-    <div className="HomePage">
+    name&&navigate("/main")||<div className="HomePage">
         <NavbarComponent/>
         <Container id="main"fluid style={{textAlign:"center",height:"73.5vh",alignItems:"center",display:"grid",margin:0}}>
             <Container style={{maxWidth:"65%"}}>

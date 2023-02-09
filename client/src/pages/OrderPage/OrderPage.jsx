@@ -18,7 +18,7 @@ const OrderPage=()=>{
     
     getCookie()
     return(
-        name&&<>
+      name&&navigate("/main")||<>
         <NavbarComponent/>
         <OrderFormComponent/>
         </>||name==undefined&&navigate("/login")

@@ -34,6 +34,10 @@ router.get("/hospitals", async (req, res) => {
   const hospitals = await Hospital.find({}).lean();
   res.send(hospitals);
 });
+router.post("/hospitals", async (req, res) => {
+  const hospitals = await Hospital.find({users:req.body.user}).lean();
+  res.send(hospitals);
+});
 
 router.get("/stock", async (req, res) => {
   const maskStock = await Stock.find({}).lean();

@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import PageHeader from "react-bootstrap/PageItem";
 import Form from "react-bootstrap/Form";
 import { useState, useRef } from "react";
-import axios from "axios";
+import axios from "axios"
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -52,7 +52,6 @@ function LoginFormComponent() {
       setValid(true);
       e.preventDefault();
       console.log("e valid");
-      
       await storeCookie();
       await getCookie();
       navigate("/main")

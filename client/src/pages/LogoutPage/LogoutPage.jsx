@@ -1,5 +1,4 @@
 import React from 'react'
-import { cookies } from 'react-cookie';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 

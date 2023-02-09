@@ -1,46 +1,48 @@
-import React, {useState,useRef,useEffect, useLayoutEffect} from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import axios from "axios"
-import NavbarComponent from "../../components/NavbarComponent/NavbarComponent"
-import { Card } from 'react-bootstrap'
-import CardComponent from '../../components/CardComponent/CardComponent'
-import OrderFormComponent from '../../components/OrderFormComponent/OrderFormComponent'
+import React, { useState, useLayoutEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import NavbarComponent from "../../components/NavbarComponent/NavbarComponent";
+import CardComponent from "../../components/CardComponent/CardComponent";
+import OrderFormComponent from "../../components/OrderFormComponent/OrderFormComponent";
 
 export default function MainPage() {
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
   const [cardVisible, setCardVisible] = useState(true);
   const [orderForm, setOrderForm] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const handleClick = (e, maskQuantity) => {
     setQuantity(maskQuantity);
     if (quantity <= 0) {
-      return
+      return;
     }
     setCardVisible(false);
     setOrderForm(true);
   };
-    const navigate=useNavigate('')
-    
-    const getCookie = async () => {
-      try {
-        const {data} = await axios.get('http://localhost:8008/api/login', { withCredentials: true })
-        setName(data.message)  
-      }
-      catch (error) {
-        navigate("/")
-        console.log(error);
-      }
-    
+  const navigate = useNavigate("");
+
+  const getCookie = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:8008/api/login", {
+        withCredentials: true,
+      });
+      setName(data.message);
+    } catch (error) {
+      navigate("/");
+      console.log(error);
     }
-    useLayoutEffect(()=>{
-      getCookie()
-    },[])
-    
+  };
+  useLayoutEffect(() => {
+    getCookie();
+  }, []);
+
   return (
-    name&&<>
-    <NavbarComponent name={name}/>
-      {cardVisible && <CardComponent order={handleClick} />}
-      {orderForm && <OrderFormComponent quantity={quantity} name={name} />}
-    </>||navigate("/")
-  )
+    (name && (
+      <>
+        <NavbarComponent name={name} />
+        {cardVisible && <CardComponent order={handleClick} />}
+        {orderForm && <OrderFormComponent quantity={quantity} name={name} />}
+      </>
+    )) ||
+    navigate("/")
+  );
 }

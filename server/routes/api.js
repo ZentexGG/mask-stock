@@ -1,20 +1,34 @@
 require('dotenv').config()
 const express = require("express");
+const session = require('express-session');
+const cors = require('cors');
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const passport = require("passport");
-const jwt = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
-const { cookieJwtAuth } = require("../middleware/cookieJwtAuth")
+const uuid = require('uuid').v4;
+const easyinvoice = require('easyinvoice');
+const fs = require('fs');
 
 const User = require("../schemas/account.model");
+
 const Order = require("../schemas/order.model");
 const Hospital = require("../schemas/hospital.model");
 const Stock = require("../schemas/stock.model");
 
 const router = express.Router();
 
-router.use(cookieParser());
+router.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.ACCESS_TOKEN_SECRET,
+    cookie: {
+      maxAge: 1000 * 60 * 60,
+      sameSite: "lax",
+      secure: false,
+    }
+  })
+);
+
 
 router.get("/hospitals", async (req, res) => {
   const hospitals = await Hospital.find({}).lean();
@@ -56,37 +70,55 @@ router.post("/login", async (req, res) => {
   let query = await User.find({ username: username }).lean();
   if (query.length > 0) {
     bcrypt.compare(password, query[0]["password"], (err, result) => {
-      // AICI AI REUSIT SA TE LOGEZI
       if (result) {
-        const token = jwt.sign(req.body, process.env.ACCESS_TOKEN_SECRET, {
-          expiresIn: "20s",
-        });
-        res.cookie("token", token, { 
-          httpOnly: true,
-          
-        });
-        // res.redirect("http://localhost:3000");
-        res.send(token);
+        try {
+          const name = req.body.username;
+          console.log(name)
+          console.log(req.body.username)
+          req.session.name = name;
+          res.send({ message: "Saved cookie successfully" }).status(201);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        res.send(false);
       }
     });
   } else {
-    // AICI E LOGIN FAILED
-    // res.redirect("http://localhost:3000/register");
     res.send(false);
   }
 });
 
+router.get("/login", async (req, res) => {
+   try {
+
+     res.send({ message: req.session.name }).status(201);
+   } catch (error) {
+     console.log(error);
+   }
+})
+
 router.post("/logout", (req, res) => {
-  res.clearCookie("token").json({ success: true });
+
 });
 
 router.post("/order", async (req, res) => {
   const dateObj = new Date();
-  const today = `${dateObj.getDate()}-${
-    dateObj.getMonth() + 1
-  }-${dateObj.getFullYear()}`;
+  const today = `${dateObj.getDate()}-${dateObj.getMonth() + 1
+    }-${dateObj.getFullYear()}`;
+  function addDays(date, days) {
+    let result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return `${result.getDate()}-${result.getMonth() + 1}-${result.getFullYear()}`;
+  }
   let userOrder = req.body;
   userOrder["date"] = today;
+  userOrder['orderNumber'] = uuid();
+  userOrder['orderNumber'] = userOrder['orderNumber'].split("-")[0];
+  let hospitalCountry = await Hospital.find({ name: req.body.hospital }).lean();
+  let hospitalVAT = hospitalCountry[0]['vat'];
+  hospitalCountry = hospitalCountry[0]['country'];
+  userOrder['vat'] = hospitalVAT;
   const finalOrder = new Order(userOrder);
   finalOrder.save().then((value) =>
     res.send({
@@ -94,6 +126,36 @@ router.post("/order", async (req, res) => {
       registeredOrder: value,
     })
   );
+  let invoiceData = {
+    "client": {
+      "company": userOrder['hospital'],
+      "country": hospitalCountry
+    },
+    "sender": {
+      "company": "CFR Calatori",
+      "address": "Gara Ploiesti Sud",
+      "zip": "69420",
+      "city": "Fierbinti",
+      "country": "Romania"
+    },
+    "information": {
+      "number": userOrder['orderNumber'],
+      "date": today
+    },
+    "products": [
+      {
+        "quantity": userOrder['quantity'],
+        "tax-rate": parseInt(hospitalVAT),
+        "price": userOrder['price'],
+        "description": "Box of Masks (100 pcs)"
+      }
+    ]
+  }
+
+  easyinvoice.createInvoice(invoiceData, function (result) {
+    fs.writeFileSync("invoice.pdf", result.pdf, "base64");
+  });
+  
 });
 
 router.put("/register", (req, res) => {
@@ -113,5 +175,7 @@ router.put("/register", (req, res) => {
     );
   });
 });
+
+
 
 module.exports = router;

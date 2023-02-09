@@ -8,7 +8,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/esm/Button'
 import { useNavigate } from 'react-router-dom'
-import Cookies from 'js-cookie'
 
 const HomePage=()=>{
   const [path,setPath]=useState("")

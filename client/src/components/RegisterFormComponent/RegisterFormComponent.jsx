@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button';
 function RegisterFormComponent() {
     const [validated,setValid]=useState(false)
     const [error,setError]=useState(true)
-    const navigate=useNavigate()
+    const navigate=useNavigate("/login")
     const [username,setUsername]=useState("")
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
@@ -19,34 +19,22 @@ function RegisterFormComponent() {
     const [uncheckedHospitals,setUncheckedHospitals]=useState([])
     const [hospital,setHospital]=useState('')
     const [hospitals,setHospitals]=useState([])
-    const handleSubmit=async (e)=>{
-      e.preventDefault()
-      const form = e.currentTarget;
-      if (form.checkValidity() === false) {
-      e.preventDefault();
-      e.stopPropagation();
-      setValid(true);
-      }
-    if (form.checkValidity() === true) {
-      setValid(true);
-      e.preventDefault();
-      console.log('e valid')
-      // TODO FETCH IN DB
-    }
-
-      
-        const response1=await fetch('http://localhost:8008/api/register',{
-          method:"PUT",
-          headers:{
-            "Content-Type":"application/json"
-          },
-          body:JSON.stringify({
-            username:username,
-            hospital:checkedHospitals,
-          })
+    const putRequest=async ()=>{
+      const response=await fetch('http://localhost:8008/api/register',{
+        method:"PUT",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          username:username,
+          hospital:checkedHospitals,
+        })
       })
+      const data1=await response.json()
+    }
+    const postRequest=async ()=>{
       const response2=await fetch('http://localhost:8008/api/register',{
-        method:"post",
+        method:"POST",
         headers:{
           "Content-Type":"application/json"
         },
@@ -56,12 +44,26 @@ function RegisterFormComponent() {
           password:password
         })
       })
-      navigate('/')
-
-      const data1=await response1.json()
-      const data2=await response1.json()
-
-      
+      const data2=await response2.json()
+      console.log(data2)
+    }
+    const handleSubmit=async (e)=>{
+      e.preventDefault()
+      const form = e.currentTarget;
+      if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+      setValid(true);
+      return
+    }
+    navigate("/login")
+    if (form.checkValidity() === true) {
+      setValid(true);
+      e.preventDefault();
+      // TODO FETCH IN DB
+      await postRequest()
+      await putRequest()
+    }
     }
     const getHospitals=async()=>{
         const response=await fetch("http://127.0.0.1:8008/api/hospitals")
@@ -107,36 +109,41 @@ function RegisterFormComponent() {
   },[hospital])
   return (
     <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-      <Form noValidate id='box' validated={validated} onSubmit={(e)=>{handleSubmit(e)}} style={{textAlign:"center",width:"70%",padding:"2rem 1rem 1rem 1rem"}}> 
+      <Form noValidate id='box' validated={validated} onSubmit={(e)=>{handleSubmit(e)}} style={{textAlign:"center",width:"90%",padding:"2rem 1rem 1rem 1rem"}}> 
       <h1 className="mb-5 card-title">Register</h1>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3">
         <Form.Floating className="mb-5">
         <Form.Control
           id="floatingInputCustom"
-          type="username"
+              type="username"
+              maxLength={30}
+          onChange={(e)=>{setUsername(e.target.value)}}
         />
         <label id="float" htmlFor="floatingInputCustom" style={{paddingTop:"10px"}}>Username</label>
       </Form.Floating>
         </Form.Group>     
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3"  >
         <Form.Floating className="mb-5">
         <Form.Control
           id="floatingInputCustom"
           type="email"
+          onChange={(e)=>{setEmail(e.target.value)}}
         />
         <label id="float" htmlFor="floatingInputCustom" style={{paddingTop:"10px"}}>Email address</label>
       </Form.Floating>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3" >
         <Form.Floating className="mb-5">
         <Form.Control
           id="floatingInputCustom"
-          type="password"
+              type="password"
+              minLength={8}
+              onChange={(e) => { setPassword(e.target.value) }}
         />
         <label id="float" htmlFor="floatingInputCustom" style={{paddingTop:"10px"}}>Password</label>
       </Form.Floating>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="select">
+        <Form.Group className="mb-3">
         <Container>
         {checkedHospitals?.map((e)=>{
                       return(

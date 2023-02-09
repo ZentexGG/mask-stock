@@ -2,12 +2,10 @@ require('dotenv').config()
 const express = require("express");
 const session = require('express-session');
 const cors = require('cors');
-const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const uuid = require('uuid').v4;
 const easyinvoice = require('easyinvoice');
 const fs = require('fs');
-const nodemailer = require('nodemailer');
 const path = require('path');
 
 const User = require("../schemas/account.model");

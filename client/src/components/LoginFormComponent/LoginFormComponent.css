@@ -1,40 +1,37 @@
-#box{
-    background-color: rgba(0, 0, 0, 0.4);
-    width:30%;
+#box input,
+#float,
+h1 {
+    color: #fff;
 }
-body #root #box input{
 
-    border:0;
-    border-bottom:1px solid white;  
-    background:transparent;
-    width:100%;
-    padding:8px 0 5px 0;
-    font-size:16px;
-    color:#fff;
+#box {
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 30%;
 }
-h1{
-    color:#fff
+
+#box input {
+    border: 0;
+    border-bottom: 1px solid white;
+    background: transparent;
+    width: 100%;
+    padding: 8px 0 5px 0;
+    font-size: 16px;
 }
-#float{
-    color: white;
-}
-#root{
+#root {
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-@media only screen and (max-width: 700px) {
+@media (max-width: 700px) {
     #box {
-      width: 60%;
+        width: 60%;
     }
-  }
-  
-  @media only screen and (max-width: 950px) {
+}
+
+@media (max-width: 950px) {
     #box {
-      width: 70%;
-      
-      
+        width: 70%;
     }
-  }
+}

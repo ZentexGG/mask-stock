@@ -1,26 +1,30 @@
-#select{
-    border:0;
-    border-bottom:1px solid white;  
-    background:transparent;
-    width:100%;
-    padding:8px 0 5px 0;
-    font-size:16px;
-    color:#fff;
+#select {
+    border: 0;
+    border-bottom: 1px solid white;
+    background: transparent;
+    width: 100%;
+    padding: 8px 0 5px 0;
+    font-size: 16px;
+    color: #fff;
     -webkit-appearance: none;
 }
-select option{
+
+select option {
     background-color: rgba(0, 0, 0, 0.4);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 250px;
 }
+
 select.decorated option:hover {
-    box-shadow: 0 0 10px 100px #1882A8 inset;
+    box-shadow: 0 0 10px 100px #1882a8 inset;
 }
-#box{
+
+#box {
     border-radius: 10px;
 }
-#root{
+
+#root {
     background-color: rgb(66, 107, 143);
 }

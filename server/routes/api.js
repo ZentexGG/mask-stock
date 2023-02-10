@@ -36,7 +36,7 @@ module.exports = Router()
         res.json(hospitals);
     })
     .get("/stock", async (req, res) => {
-        const maskStock = await Stock.find({}).lean();
+        const maskStock = await Stock.findOne({}).lean();
         res.json(maskStock);
     })
     .post("/register", async (req, res) => {

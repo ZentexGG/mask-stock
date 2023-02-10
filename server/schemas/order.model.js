@@ -1,12 +1,13 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const orderSchema = new mongoose.Schema({
-  price: Number, // DIN FRONTEND (PRET PE BUCATA)
-  date: String, // DIN BACKEND
-  quantity: Number, // DIN FRONTEND
-  hospital: String, // DIN FRONTEND
-  orderNumber: String, // DIN BACKEND
-  vat: Number // DIN BACKEND
-});
-
-module.exports = mongoose.model("Order", orderSchema);
+module.exports = model(
+    "Order",
+    new Schema({
+        price: Number,
+        date: String,
+        quantity: Number,
+        hospital: String,
+        orderNumber: String,
+        vat: Number,
+    })
+);

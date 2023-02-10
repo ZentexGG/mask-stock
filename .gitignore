@@ -21,3 +21,14 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+client/package-lock.json
+client/public/favicon.ico
+client/public/logo192.png
+client/public/logo512.png
+client/public/manifest.json
+client/public/robots.txt
+server/.env
+server/invoice.pdf
+server/package-lock.json
